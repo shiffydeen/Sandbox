@@ -1,143 +1,57 @@
-const pizzaData = [
-  {
-    name: "Focaccia",
-    ingredients: "Bread with italian olive oil and rosemary",
-    price: 6,
-    photoName: "pizzas/focaccia.jpg",
-    soldOut: false,
-  },
-  {
-    name: "Pizza Margherita",
-    ingredients: "Tomato and mozarella",
-    price: 10,
-    photoName: "pizzas/margherita.jpg",
-    soldOut: false,
-  },
-  {
-    name: "Pizza Spinaci",
-    ingredients: "Tomato, mozarella, spinach, and ricotta cheese",
-    price: 12,
-    photoName: "pizzas/spinaci.jpg",
-    soldOut: false,
-  },
-  {
-    name: "Pizza Funghi",
-    ingredients: "Tomato, mozarella, mushrooms, and onion",
-    price: 12,
-    photoName: "pizzas/funghi.jpg",
-    soldOut: false,
-  },
-  {
-    name: "Pizza Salamino",
-    ingredients: "Tomato, mozarella, and pepperoni",
-    price: 15,
-    photoName: "pizzas/salamino.jpg",
-    soldOut: true,
-  },
-  {
-    name: "Pizza Prosciutto",
-    ingredients: "Tomato, mozarella, ham, aragula, and burrata cheese",
-    price: 18,
-    photoName: "pizzas/prosciutto.jpg",
-    soldOut: false,
-  },
+const initialItems = [
+  { id: 1, description: "Passports", quantity: 2, packed: false },
+  { id: 2, description: "Socks", quantity: 12, packed: false },
+  { id: 2, description: "Charger", quantity: 1, packed: true },
 ];
 
 
-function Menu() {
-
-    const pizzas = pizzaData
-    const pizzaNum = pizzas.length
-
+export default function App() {
     return (
-        <main className="menu">
-            <h2>Our Menu</h2>
-            
-            {
-                pizzaNum > 0 ? (
-                    <>
-                        <p>Authentic Italian cuisine. 6 creative dishes to choose from. All from our stone oven, all organic, all delicious.</p>
-                        <ul className="pizzas">
-                            {pizzaData.map((pizza) => {
-                                return <Pizza key={pizza.name} pizzaObj={pizza}/>
-                            })}
-                        </ul>
-                    </>
-                ) : (
-                    <p>We're still working on our menu. Please come back later</p>
-                )
-            }
-            
-        </main>
+        <div className="app">
+            <Logo />
+            <Form />
+            <PackingList />
+            <Stats />
+        </div>
     )
 }
 
-function Pizza({pizzaObj}) {
 
-    // if (props.pizzaObj.soldOut) return null
-    
+function Logo() {
+   return <h1>🌴 Far Away 🧳</h1>
+}
+
+function Form() {
+    return <div className="add-form">
+        <h3>What do you need for your 😍 trip?</h3>
+    </div>
+}
+
+function PackingList() {
     return (
-        <li className={`pizza ${pizzaObj.soldOut ? 'sold-out' : ''}`}>
-            <img src={pizzaObj.photoName} alt="" />
-            <div>
-                <h3>{pizzaObj.name}</h3>
-                <p>{pizzaObj.ingredients}</p>
-                <span>{pizzaObj.soldOut ? "SOLD OUT" : pizzaObj.price + 3}</span>
-            </div>
+        <div className="list">
+            <ul>
+                {initialItems.map((item) => (
+                    <Item item={item}/>
+                ))}
+            </ul>
+        </div>
+    )
+}
+
+function Item({item}) {
+    return (
+        <li>
+            <span style={item.packed ? {textDecoration: "line-through"} : {}}>
+                {item.quantity} {item.description}
+            </span>
+            <button>❌</button>
         </li>
-    )
+        )
 }
 
-function Header() {
-    const style = {color: 'red', fontSize: '48px', textTransform: "uppercase" }
-    return (
-        <header className="header">
-            <h1 style={style}>Fast React Pizza Co.</h1>
-        </header>
-    )
+function Stats() {
+    return <footer className="stats">
+        <em>💼 You have X items on your list, and you already packed X (X%)</em>
+    </footer>
 }
-
-
-
-function Footer () {
-    const hour = new Date().getHours()
-    const openHour = 20;
-    const closeHour = 22;
-    const isOpen = hour >= openHour && hour <= closeHour;
-
-    // if (hour >= openHour && hour <=closeHour) alert("We're currently open");
-    // else alert("Sorry, we're closed");
-
-    // if (!isOpen) return <p>We're happy to welcome you between {openHour}:00 and {closeHour}:00. </p>
-
-    return (
-        <footer className="footer">
-            {isOpen ? 
-            <Order openHour={openHour} closeHour={closeHour}/> : (
-                <p>We're happy to welcome you between {openHour}:00 and {closeHour}:00. </p>
-            )}
-        </footer>
-    )
-}
-
-function Order(props) {
-    return (
-        <div className="order">
-            <p>We're open until {props.closeHour}:00. Come visit us or order online. </p>
-            <button className="btn">Order</button>
-        </div>
-    )
-}
-
-function App() {
-    return (
-        <div className="container">
-            <Header />
-            <Menu />
-            <Footer />
-        </div>
-    )
-}
-
-
-export default App
